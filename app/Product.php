@@ -2,44 +2,42 @@
 
 namespace App;
 
-use Exception;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
     protected $fillable = [
-        'seller_id',
-        'category_id',
-        'name',
-        'slug',
-        'price',
-        'images',
-        'description',
+        'name', 'price', 'description', 'seller_id', 'slug', 'images'
     ];
-    public function Category(){
-        return $this->belongsTo('App\CategoryProduct');
-    }
 
+    // Handle upload foto baru
+    public function handleFoto($request)
+    {
+        if ($request->hasFile('images')) {
+            $file     = $request->file('images');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $filename);
 
-    //
-    public function handleFoto($request){
-        $img = $request->file('images');
-        $filename = Str::slug($request->name).time().".".$img->extension();
-        $filepath = $request->images->storeAs('uploads/products', $filename,'public');
-        return "/storage/{$filepath}";
-    }
-
-    public function updateFoto($request, $images){
-        $img = $request->file('images');
-        $filename = Str::slug($request->name).time().".".$img->extension();
-        $filepath = $request->images->storeAs('uploads/products', $filename,'public');
-        try{
-            unlink(public_path($images));
-            unlink(asset($images));
-            return "/storage/{$filepath}";
-        }catch(Exception $e){
-            return "/storage/{$filepath}";
+            return $filename; // hanya simpan nama file
         }
+        return null;
+    }
+
+    // Handle update foto (hapus lama, simpan baru)
+    public function updateFoto($request, $oldImage = null)
+    {
+        if ($request->hasFile('images')) {
+            // hapus foto lama jika ada
+            if ($oldImage && file_exists(public_path('uploads/' . $oldImage))) {
+                unlink(public_path('uploads/' . $oldImage));
+            }
+
+            $file     = $request->file('images');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $filename);
+
+            return $filename;
+        }
+        return $oldImage; // kalau tidak ada upload baru, pakai yang lama
     }
 }

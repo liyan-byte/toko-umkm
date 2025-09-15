@@ -63,6 +63,8 @@ Route::prefix('seller')->name('seller.')->group(function () {
 
         // Profile
         Route::get('profile', [ProfileController::class, 'index'])->name('profile');
+        Route::post('profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
 
         // Verification
         Route::get('verification/resend', [VerificationController::class, 'resend'])->name('verification.resend');

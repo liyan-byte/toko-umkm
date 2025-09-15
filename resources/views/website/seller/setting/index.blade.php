@@ -48,15 +48,25 @@
                 </div>
 
                 {{-- TOKO --}}
-                <h5 class="mt-4"><i class="fa fa-store"></i> Informasi Toko</h5>
-                <div class="mb-3">
-                    <label>Nama Toko</label>
-                    <input type="text" name="nama_toko" value="{{ old('nama_toko', $user->nama_toko) }}" class="form-control">
-                </div>
-                <div class="mb-3">
-                    <label>Alamat Toko</label>
-                    <textarea name="alamat_toko" class="form-control">{{ old('alamat_toko', $user->alamat_toko) }}</textarea>
-                </div>
+<h5 class="mt-4"><i class="fa fa-store"></i> Informasi Toko</h5>
+<div class="mb-3">
+    <label>Nama Toko</label>
+    <input type="text" name="nama_toko" value="{{ old('nama_toko', $user->nama_toko) }}" class="form-control">
+</div>
+<div class="mb-3">
+    <label>Alamat Toko</label>
+    <textarea name="alamat_toko" class="form-control">{{ old('alamat_toko', $user->alamat_toko) }}</textarea>
+</div>
+
+{{-- Cover Toko --}}
+<div class="mb-3">
+    <label for="cover" class="form-label">Cover Toko</label>
+    <input type="file" class="form-control" name="cover" id="cover">
+    @if($user->cover)
+        <img src="{{ asset($user->cover) }}" alt="Cover Toko" class="img-fluid mt-2" style="max-height:200px; object-fit:cover;">
+    @endif
+</div>
+
 
                 <button type="submit" class="btn btn-success">Simpan Perubahan</button>
             </form>

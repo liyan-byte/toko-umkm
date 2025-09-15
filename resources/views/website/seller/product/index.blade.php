@@ -20,9 +20,10 @@
                         <div class="card h-100 shadow-sm border-0">
                             {{-- Gambar Produk --}}
                             <img class="card-img-top img-fluid"
-                                 src="{{ $item->images ? asset($item->images) : asset('images/no-image.png') }}"
-                                 alt="{{ $item->name }}"
-                                 style="height:200px; object-fit:cover;">
+                            src="{{ $item->images ? asset('uploads/'.$item->images) : asset('images/no-image.png') }}"
+                            alt="{{ $item->name }}"
+                            style="height:200px; object-fit:cover;">
+
 
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title text-dark">{{ $item->name }}</h5>

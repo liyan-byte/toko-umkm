@@ -11,20 +11,24 @@ class Seller extends Authenticatable implements MustVerifyEmail
     protected $table = 'sellers';
     protected $guard = 'seller';
     protected $fillable = [
-        'category_id',
-        'province_id',
-        'regency_id',
-        'district_id',
-        'village_id',
-        'status',
-        'is_verified',
-        'email',
-        'password',
-        'name',
-        'slug',
-        'UMKMku',
-        'description',
-    ];
+    'category_id',
+    'province_id',
+    'regency_id',
+    'district_id',
+    'village_id',
+    'status',
+    'is_verified',
+    'email',
+    'password',
+    'name',
+    'slug',
+    'UMKMku',
+    'description',
+    'profile_picture', // ✅ tambahkan
+    'cover',           // ✅ tambahkan
+    'whatsapp',        // kalau ada
+];
+
     protected $hidden = [
         'password', 'remember_token',
     ];

@@ -15,34 +15,41 @@ class SettingController extends Controller
     }
 
     public function update(Request $request)
-    {
-        $user = Auth::guard('seller')->user();
+{
+    // Ambil seller yang sedang login
+    $seller = Auth::guard('seller')->user();
 
-        $request->validate([
-            'name'   => 'required|string|max:255',
-            'email'  => 'required|email|max:255',
-            'whatsapp'  => 'nullable|string|max:20',
-            'nama_toko' => 'nullable|string|max:255',
-            'alamat_toko' => 'nullable|string|max:255',
-            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
-
-        // kalau ada upload file baru
-        if ($request->hasFile('profile_picture')) {
-            $file = $request->file('profile_picture');
-            $filename = time().'_'.$file->getClientOriginalName();
-            $file->move(public_path('uploads/profile'), $filename);
-            $user->profile_picture = 'uploads/profile/'.$filename;
-        }
-
-        // update field lain
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->whatsapp = $request->whatsapp;
-        $user->nama_toko = $request->nama_toko;
-        $user->alamat_toko = $request->alamat_toko;
-        $user->save();
-
-        return redirect()->back()->with('success', 'Pengaturan berhasil diperbarui!');
+    if (!$seller) {
+        return redirect()->back()->with('error', 'Data seller tidak ditemukan.');
     }
+
+    // Validasi
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email',
+        'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4096',
+    ]);
+
+    // Update foto profil
+    if ($request->hasFile('profile_picture')) {
+        $file = $request->file('profile_picture');
+        $profilePath = $file->move('uploads/profile', time().'_'.$file->getClientOriginalName());
+        $seller->profile_picture = $profilePath;
+    }
+
+    // Update cover toko
+    if ($request->hasFile('cover')) {
+        $file = $request->file('cover');
+        $coverPath = $file->move('uploads/cover', time().'_'.$file->getClientOriginalName());
+        $seller->cover = $coverPath;
+    }
+
+    // Update field lain
+    $seller->name = $request->name;
+    $seller->email = $request->email;
+    $seller->save();
+
+    return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
+}
 }

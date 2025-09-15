@@ -4,6 +4,26 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-8 offset-md-2">
+
+            {{-- Card Cover & Profil --}}
+            <div class="card mb-4">
+                @if($seller->cover)
+                    <img src="{{ asset($seller->cover) }}" class="card-img-top" style="max-height: 250px; object-fit: cover;">
+                @else
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height:250px;">
+                        <span>Belum ada cover toko</span>
+                    </div>
+                @endif
+                <div class="card-body text-center">
+                    <img src="{{ asset($seller->profile_picture ?? 'default.png') }}" 
+                         alt="Foto Profil" class="rounded-circle mb-2" width="120" height="120">
+                    <h3>{{ $seller->name }}</h3>
+                    <p>{{ $seller->email }} | {{ $seller->whatsapp }}</p>
+                    <p>{{ $seller->description }}</p>
+                </div>
+            </div>
+
+            {{-- Card Form Update --}}
             <div class="card shadow-sm">
                 <div class="card-header bg-success text-white">
                     <h5 class="mb-0">Profil Saya</h5>

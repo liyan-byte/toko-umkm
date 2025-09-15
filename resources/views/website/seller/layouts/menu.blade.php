@@ -21,6 +21,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSeller">
+                <!-- Menu utama -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('seller.dashboard') }}">Dashboard</a>
@@ -45,8 +46,13 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sellerDropdown">
                             <li>
+                                <a class="dropdown-item" href="{{ route('seller.profile') }}">
+                                    👤 Lihat Profil
+                                </a>
+                            </li>
+                            <li>
                                 <a class="dropdown-item" href="{{ route('seller.setting') }}">
-                                    ⚙️ Profil
+                                    ⚙️ Pengaturan
                                 </a>
                             </li>
                             <li>
