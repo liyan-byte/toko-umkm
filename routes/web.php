@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\Seller\ProductController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
 use App\Http\Controllers\Seller\LoginController as SellerLoginController;
@@ -8,12 +10,15 @@ use App\Http\Controllers\Seller\RegisterController as SellerRegisterController;
 use App\Http\Controllers\Seller\SettingController;
 use App\Http\Controllers\Seller\ReportController;
 use App\Http\Controllers\Seller\VerificationController;
-use App\Http\Controllers\Seller\ProfileController; // <-- tambahkan ini
+use App\Http\Controllers\Seller\ProfileController;
+
 use App\Http\Controllers\Buyer\LoginController as BuyerLoginController;
 use App\Http\Controllers\Buyer\RegisterController as BuyerRegisterController;
 use App\Http\Controllers\Buyer\DashboardController as BuyerDashboardController;
+
 use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\HomeController;
+
 use App\Http\Controllers\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Auth\ConfirmPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -56,7 +61,7 @@ Route::prefix('seller')->name('seller.')->group(function () {
         Route::post('setting', [SettingController::class, 'update'])->name('setting.update');
         Route::get('report', [ReportController::class, 'index'])->name('report');
 
-        // ✅ Tambahkan Profile Route
+        // Profile
         Route::get('profile', [ProfileController::class, 'index'])->name('profile');
 
         // Verification
@@ -108,3 +113,27 @@ Route::prefix('admin-panel')->name('admin.')->group(function () {
     // Dashboard Admin
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Global Logout Route (untuk semua role)
+|--------------------------------------------------------------------------
+*/
+Route::post('/logout', function () {
+    if (auth('seller')->check()) {
+        auth('seller')->logout();
+        return redirect()->route('seller.login');
+    }
+
+    if (auth('admin')->check()) {
+        auth('admin')->logout();
+        return redirect()->route('admin.login');
+    }
+
+    if (auth()->check()) { // default buyer
+        auth()->logout();
+        return redirect()->route('buyer.login');
+    }
+
+    return redirect('/'); // fallback kalau tidak ada yang login
+})->name('logout');

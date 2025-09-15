@@ -7,91 +7,113 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'UMKM') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-    <!-- Styles -->
+    <!-- Custom CSS -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false"
-                        aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+<div id="app">
+    {{-- Navbar --}}
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url('/') }}">
+            Toko <span class="text-success">UMKMku</span>
+        </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                    </ul>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left Navbar -->
+                <ul class="navbar-nav me-auto"></ul>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <!-- Dropdown Login -->
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdownLogin" class="nav-link dropdown-toggle" href="#" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ __('Login') }}
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownLogin">
-                                    <a class="dropdown-item" href="{{ route('buyer.login') }}">Login Buyer</a>
-                                    <a class="dropdown-item" href="{{ route('seller.login') }}">Login Seller</a>
-                                </div>
-                            </li>
+                <!-- Right Navbar -->
+                <ul class="navbar-nav ms-auto">
+                    @guest
+                        {{-- Login Dropdown --}}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" 
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Login
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('buyer.login') }}">Login Buyer</a></li>
+                                <li><a class="dropdown-item" href="{{ route('seller.login') }}">Login Seller</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.login') }}">Login Admin</a></li>
+                            </ul>
+                        </li>
 
-                            <!-- Dropdown Register -->
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdownRegister" class="nav-link dropdown-toggle" href="#" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ __('Register') }}
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownRegister">
-                                    <a class="dropdown-item" href="{{ route('buyer.register') }}">Register Buyer</a>
-                                    <a class="dropdown-item" href="{{ route('seller.register') }}">Register Seller</a>
-                                </div>
-                            </li>
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                 document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
+                        {{-- Register Dropdown --}}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" 
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Register
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('buyer.register') }}">Register Buyer</a></li>
+                                <li><a class="dropdown-item" href="{{ route('seller.register') }}">Register Seller</a></li>
+                            </ul>
+                        </li>
+                    @else
+                        {{-- User Dropdown --}}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" 
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ Auth::user()->name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                {{-- Logout menyesuaikan guard --}}
+                                @if(Auth::guard('seller')->check())
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('seller.logout') }}"
+                                           onclick="event.preventDefault(); document.getElementById('seller-logout-form').submit();">
+                                            Logout Seller
+                                        </a>
+                                        <form id="seller-logout-form" action="{{ route('seller.logout') }}" method="GET" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                @elseif(Auth::guard('web')->check())
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('buyer.logout') }}"
+                                           onclick="event.preventDefault(); document.getElementById('buyer-logout-form').submit();">
+                                            Logout Buyer
+                                        </a>
+                                        <form id="buyer-logout-form" action="{{ route('buyer.logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                @elseif(Auth::guard('admin')->check())
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('admin.logout') }}"
+                                           onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
+                                            Logout Admin
+                                        </a>
+                                        <form id="admin-logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endguest
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+    <main class="py-4">
+        @yield('content')
+    </main>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 # UMKMku [Unfinished Project]
 
-UMKMku adalah platform jual beli barang atau jasa secara online yang memanfatkan fitur UMKMku. Pengguna dapat melakukan pembelian barang atau jasa tanpa harus membuat akun terlebih dahulu. (Masih dalam pengembangan)
+UMKMku adalah platform jual beli barang atau jasa secara online yang memanfatkan fitur UMKMku. Pengguna dapat melakukan pembelian barang atau jasa tanpa harus membuat akun terlebih dahulu. 
 
 ## Latar Belakang
 Lorem ipsum
